@@ -1,0 +1,17 @@
+[project]
+name = "daraz-product-scraper"
+version = "0.1.0"
+description = "Production-oriented Python scraper for collecting Daraz search results for 'AirPods Pro 2nd Gen' with fixed JSON schema export."
+requires-python = ">=3.11"
+
+dependencies = [
+    "playwright",
+    "beautifulsoup4",
+    "pydantic",
+    "pytest"
+]
+
+[tool.pytest.ini_options]
+pythonpath = [
+    "src"
+]
