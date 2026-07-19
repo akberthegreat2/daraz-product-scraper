@@ -1,8 +1,12 @@
-from daraz_scraper.browser import Browser
-from daraz_scraper.search import DarazSearch
-from daraz_scraper.parser import ProductParser
+from daraz_scraper.collector import Collector
 from daraz_scraper.exporter import JsonExporter
+from daraz_scraper.browser import Browser
 
+
+BASE_URL = (
+    "https://www.daraz.com.bd/catalog/"
+    "?q=AirPods+Pro+2nd+Gen"
+)
 
 OUTPUT_FILE = "data/output/products.json"
 
@@ -14,18 +18,17 @@ def main():
     page = browser.start()
 
     try:
-        search = DarazSearch(page)
 
-        search.execute()
+        collector = Collector(
+            page,
+            BASE_URL,
+            max_pages=100
+        )
 
-        html = page.content()
-
-        parser = ProductParser()
-
-        products = parser.parse(html)
+        products = collector.collect()
 
         print(
-            f"Products found: {len(products)}"
+            f"Total products: {len(products)}"
         )
 
         exporter = JsonExporter()
@@ -33,10 +36,6 @@ def main():
         exporter.export(
             products,
             OUTPUT_FILE
-        )
-
-        print(
-            f"Saved: {OUTPUT_FILE}"
         )
 
     finally:
