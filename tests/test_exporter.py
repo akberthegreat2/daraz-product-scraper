@@ -9,9 +9,9 @@ def test_json_schema():
     products = [
         Product(
             name="AirPods Pro 2nd Gen",
-            price="৳384",
-            sold="482 sold",
-            rating="78",
+            price=384.0,
+            sold=482,
+            rating=78,
             link="https://example.com"
         )
     ]
@@ -41,3 +41,7 @@ def test_json_schema():
         "rating",
         "link",
     ]
+
+    assert isinstance(data[0]["price"], float)
+    assert isinstance(data[0]["sold"], int)
+    assert isinstance(data[0]["rating"], int)
