@@ -2,24 +2,14 @@ from daraz_scraper.browser import Browser
 from daraz_scraper.search import DarazSearch
 
 
-def main():
+def test_daraz_search():
     browser = Browser(headless=True)
 
     page = browser.start()
 
     search = DarazSearch(page)
-
     search.execute()
 
-    print("TITLE:", page.title())
-    print("URL:", page.url)
-
-    page.screenshot(
-        path="search_result.png"
-    )
+    assert "catalog" in page.url
 
     browser.close()
-
-
-if __name__ == "__main__":
-    main()

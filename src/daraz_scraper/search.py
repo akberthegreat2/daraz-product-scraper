@@ -2,17 +2,18 @@ SEARCH_TERM = "AirPods Pro 2nd Gen"
 
 
 class DarazSearch:
+    BASE_URL = "https://www.daraz.com.bd/catalog/"
+
     def __init__(self, page):
         self.page = page
 
-    def search(self, keyword=SEARCH_TERM):
-        search_url = (
-            "https://www.daraz.com.bd/catalog/"
-            "?q="
-            + keyword.replace(" ", "+")
+    def execute(self):
+        url = (
+            f"{self.BASE_URL}?q="
+            f"{SEARCH_TERM.replace(' ', '+')}"
         )
 
-        self.page.goto(search_url)
+        self.page.goto(url)
 
         self.page.wait_for_load_state("networkidle")
 
