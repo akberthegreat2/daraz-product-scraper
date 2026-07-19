@@ -1,16 +1,20 @@
 from daraz_scraper.browser import Browser
+from daraz_scraper.search import DarazSearch
 
 
 def main():
-    browser = Browser(headless=True, args=["--no-sandbox"])
+    browser = Browser(headless=True)
 
     page = browser.start()
 
-    page.goto("https://www.daraz.com.bd")
+    search = DarazSearch(page)
+
+    search.search()
 
     print("TITLE:", page.title())
+    print("URL:", page.url)
 
-    page.screenshot(path="daraz_home.png")
+    page.screenshot(path="search_result.png")
 
     browser.close()
 
