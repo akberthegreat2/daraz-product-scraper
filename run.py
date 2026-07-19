@@ -1,24 +1,46 @@
 from daraz_scraper.browser import Browser
 from daraz_scraper.search import DarazSearch
+from daraz_scraper.parser import ProductParser
+from daraz_scraper.exporter import JsonExporter
+
+
+OUTPUT_FILE = "data/output/products.json"
 
 
 def main():
+
     browser = Browser(headless=True)
 
     page = browser.start()
 
-    search = DarazSearch(page)
+    try:
+        search = DarazSearch(page)
 
-    search.execute()
+        search.execute()
 
-    print("TITLE:", page.title())
-    print("URL:", page.url)
+        html = page.content()
 
-    page.screenshot(
-        path="search_result.png"
-    )
+        parser = ProductParser()
 
-    browser.close()
+        products = parser.parse(html)
+
+        print(
+            f"Products found: {len(products)}"
+        )
+
+        exporter = JsonExporter()
+
+        exporter.export(
+            products,
+            OUTPUT_FILE
+        )
+
+        print(
+            f"Saved: {OUTPUT_FILE}"
+        )
+
+    finally:
+        browser.close()
 
 
 if __name__ == "__main__":

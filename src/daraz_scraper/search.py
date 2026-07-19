@@ -13,8 +13,6 @@ class DarazSearch:
             f"{SEARCH_TERM.replace(' ', '+')}"
         )
 
-        self.page.goto(url)
-
-        self.page.wait_for_load_state("networkidle")
+        self.page.goto(url,wait_until="domcontentloaded",timeout=60000)
 
         return self.page

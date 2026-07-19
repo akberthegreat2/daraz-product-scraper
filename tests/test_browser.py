@@ -6,7 +6,7 @@ def test_browser_opens_daraz():
 
     page = browser.start()
 
-    page.goto("https://www.daraz.com.bd")
+    page.goto("https://www.daraz.com.bd",wait_until="domcontentloaded")
 
     assert "Daraz" in page.title()
 
