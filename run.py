@@ -1,6 +1,6 @@
-from daraz_scraper.collector import Collector
-from daraz_scraper.exporter import JsonExporter
-from daraz_scraper.browser import Browser
+from daraz_scraper import ProductCollector
+from daraz_scraper import JsonExporter
+from daraz_scraper import Browser
 
 
 BASE_URL = (
@@ -21,7 +21,7 @@ def main():
 
     try:
 
-        collector = Collector(
+        collector = ProductCollector(
             page,
             BASE_URL,
             max_pages=100

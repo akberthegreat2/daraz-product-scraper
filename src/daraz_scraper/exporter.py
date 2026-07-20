@@ -2,7 +2,7 @@ import json
 
 from dataclasses import asdict
 
-from daraz_scraper.models import Product
+from .models import Product
 
 
 class JsonExporter:

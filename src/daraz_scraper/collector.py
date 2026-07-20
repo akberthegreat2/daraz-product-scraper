@@ -1,8 +1,8 @@
-from daraz_scraper.pagination import Pagination
-from daraz_scraper.parser import ProductParser
+from .pagination import Pagination
+from .parser import ProductParser
 
 
-class Collector:
+class ProductCollector:
 
     def __init__(self, page, base_url, max_pages=100):
         self.page = page

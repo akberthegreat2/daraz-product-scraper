@@ -1,8 +1,8 @@
-from daraz_scraper.browser import Browser
+from daraz_scraper import BrowserManager
 
 
 def test_browser_opens_daraz():
-    browser = Browser(headless=True)
+    browser = BrowserManager(headless=True)
 
     browser.start()
 

@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 
-from daraz_scraper.models import Product
+from .models import Product
 
 
 class ProductParser:

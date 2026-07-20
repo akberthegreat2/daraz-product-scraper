@@ -1,7 +1,7 @@
 import json
 
-from daraz_scraper.exporter import JsonExporter
-from daraz_scraper.models import Product
+from daraz_scraper import JsonExporter
+from daraz_scraper import Product
 
 
 def test_json_schema():

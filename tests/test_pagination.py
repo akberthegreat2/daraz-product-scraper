@@ -1,4 +1,4 @@
-from daraz_scraper.pagination import Pagination
+from daraz_scraper import Pagination
 
 
 def test_page_url():

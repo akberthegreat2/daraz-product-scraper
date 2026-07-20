@@ -1,4 +1,4 @@
-from daraz_scraper.parser import ProductParser
+from daraz_scraper import ProductParser
 
 
 def test_product_parser():

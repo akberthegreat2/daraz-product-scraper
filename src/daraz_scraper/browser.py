@@ -1,28 +1,47 @@
-from playwright.sync_api import sync_playwright
+"""
+Browser management for the Daraz scraper.
+
+This module provides a thin wrapper around Playwright that is responsible
+for launching and shutting down the browser.
+"""
+
+from playwright.sync_api import Page, Playwright, Browser as PlaywrightBrowser, sync_playwright
 
 
-class Browser:
-    def __init__(self, headless=True, args=None):
+class BrowserManager:
+    """Launch and manage a Playwright Chromium browser."""
+
+    def __init__(
+        self,
+        headless: bool = True,
+        args: list[str] | None = None,
+    ) -> None:
         self.headless = headless
-        self.playwright = None
-        self.browser = None
-        self.page = None
         self.args = args or ["--no-sandbox"]
 
-    def start(self):
+        self.playwright: Playwright | None = None
+        self.browser: PlaywrightBrowser | None = None
+        self.page: Page | None = None
+
+    def start(self) -> Page:
+        """Launch Chromium and return a new page."""
+
         self.playwright = sync_playwright().start()
 
         self.browser = self.playwright.chromium.launch(
-            headless=self.headless
+            headless=self.headless,
+            args=self.args,
         )
 
         self.page = self.browser.new_page()
 
         return self.page
 
-    def close(self):
-        if self.browser:
+    def close(self) -> None:
+        """Close the browser and stop Playwright."""
+
+        if self.browser is not None:
             self.browser.close()
 
-        if self.playwright:
+        if self.playwright is not None:
             self.playwright.stop()
