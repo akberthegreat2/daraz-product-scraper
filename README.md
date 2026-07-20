@@ -113,14 +113,45 @@ playwright install chromium
 
 # Quick Start
 
-Run the project using
+## Command Line Usage
+
+Run the scraper directly after installation:
 
 ```bash
-python run.py
+daraz-scraper "AirPods Pro 2nd Gen"
 ```
 
-Adjust the search term or configuration inside `run.py` as needed.
+### Examples
 
+Scrape a different product:
+
+```bash
+daraz-scraper "iPhone 15"
+```
+
+Limit the number of pages:
+
+```bash
+daraz-scraper "Mechanical Keyboard" --pages 5
+```
+
+Save to a custom output file:
+
+```bash
+daraz-scraper "RTX 5070" --output data/output/gpus.json
+```
+
+Run with a visible browser window:
+
+```bash
+daraz-scraper "SSD" --headed
+```
+
+View all available options:
+
+```bash
+daraz-scraper --help
+```
 ---
 
 # How It Works
@@ -162,7 +193,7 @@ Example output:
 ```json
 {
   "name": "Apple AirPods Pro (2nd Generation)",
-  "price": "32990",
+  "price": 32990.0,
   "rating": 4.9,
   "sold": "500+",
   "link": "https://..."

@@ -8,6 +8,9 @@ from .pagination import Pagination
 from .parser import ProductParser
 from .models import Product
 
+import logging
+
+logger = logging.getLogger(__name__)
 
 class ProductCollector:
     """Collect products from multiple Daraz search result pages."""
@@ -42,7 +45,7 @@ class ProductCollector:
 
         url = self.pagination.page_url(page_number)
 
-        print(f"Scraping page {page_number}")
+        logger.info(f"Scraping page {page_number}")
 
         self.page.goto(
             url,
@@ -54,6 +57,6 @@ class ProductCollector:
 
         products = self.parser.parse(html)
 
-        print(f"Found {len(products)} products")
+        logger.info(f"Found {len(products)} products")
 
         return products

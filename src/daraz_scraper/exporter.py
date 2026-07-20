@@ -34,6 +34,8 @@ class JsonExporter:
 
         filename = Path(filename)
 
+        filename.parent.mkdir(parents=True, exist_ok=True)
+
         with filename.open(
             "w",
             encoding="utf-8",

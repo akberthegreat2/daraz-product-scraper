@@ -219,5 +219,3 @@ __marimo__/
 
 # No logs and data on commit
 logs/*
-data/output/*
-data/samples/*

@@ -1,6 +1,11 @@
 from .browser import Browser
 from .search import DarazSearch
 
+import logging
+
+logger = logging.getLogger(__name__)
+
+logging.basicConfig(level=logging.INFO,format="%(asctime)s | %(levelname)s | %(message)s")
 
 def main():
     browser = BrowserManager(headless=True)
@@ -23,8 +28,8 @@ def main():
     ) as file:
         file.write(html)
 
-    print("Saved HTML")
-    print("Length:", len(html))
+    logger.info("Saved HTML")
+    logger.info("Length:", len(html))
 
     browser.close()
 
