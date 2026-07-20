@@ -300,6 +300,8 @@ If you discover a bug or have an idea for improvement, feel free to open an issu
 
 This project is licensed under the MIT License.
 
+![License](https://img.shields.io/badge/license-MIT-green.svg)
+
 ---
 
 # Why This Project?
