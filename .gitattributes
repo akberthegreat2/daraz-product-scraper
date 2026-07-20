@@ -1,0 +1,15 @@
+# Normalize text files to LF
+* text=auto eol=lf
+
+# Exclude HTML fixtures from GitHub language statistics
+data/samples/*.html linguist-vendored
+data/samples/**/*.html linguist-vendored
+
+# Exclude generated JSON output from language statistics
+data/output/*.json linguist-generated
+
+# Mark documentation
+*.md text
+
+# Python source
+*.py text diff=python
