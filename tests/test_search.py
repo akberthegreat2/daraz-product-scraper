@@ -11,7 +11,7 @@ def test_daraz_search():
 
 
     search = DarazSearch(page)
-    search.execute()
+    search.navigate()
 
     assert "catalog" in page.url
 

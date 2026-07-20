@@ -12,7 +12,7 @@ def main():
 
     search = DarazSearch(page)
 
-    search.execute()
+    search.navigate()
 
     html = page.content()
 
