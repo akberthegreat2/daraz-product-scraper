@@ -1,20 +1,26 @@
-from urllib.parse import urlencode
+"""
+Pagination utilities for Daraz search results.
+"""
+
+from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
 
 class Pagination:
+    """Generate paginated Daraz search URLs."""
 
-    def __init__(self, base_url: str):
+    def __init__(self, base_url: str) -> None:
         self.base_url = base_url
 
-    def page_url(
-        self,
-        page_number: int
-    ) -> str:
+    def page_url(self, page_number: int) -> str:
+        """
+        Return the URL for the requested page number.
+        """
 
-        separator = "&" if "?" in self.base_url else "?"
+        parsed = urlparse(self.base_url)
 
-        return (
-            f"{self.base_url}"
-            f"{separator}"
-            f"page={page_number}"
+        query = parse_qs(parsed.query)
+        query["page"] = [str(page_number)]
+
+        return urlunparse(
+            parsed._replace(query=urlencode(query, doseq=True))
         )
