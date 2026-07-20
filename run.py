@@ -1,6 +1,6 @@
 from daraz_scraper import ProductCollector
 from daraz_scraper import JsonExporter
-from daraz_scraper import Browser
+from daraz_scraper import BrowserManager
 
 
 BASE_URL = (
@@ -13,7 +13,7 @@ OUTPUT_FILE = "data/output/products.json"
 
 def main():
 
-    browser = Browser(headless=True)
+    browser = BrowserManager(headless=True)
 
     browser.start()
 
