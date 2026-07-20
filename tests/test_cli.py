@@ -40,3 +40,30 @@ def test_main(
     collector.collect.assert_called_once()
 
     mock_exporter.return_value.export.assert_called_once()
+
+@patch("daraz_scraper.cli.JsonExporter")
+@patch("daraz_scraper.cli.ProductCollector")
+@patch("daraz_scraper.cli.BrowserManager")
+@patch("daraz_scraper.cli.parse_args")
+def test_keyboard_interrupt(
+    mock_parse_args,
+    mock_browser,
+    mock_collector,
+    mock_exporter,
+):
+    mock_parse_args.return_value = MagicMock(
+        query="AirPods",
+        pages=2,
+        output="output.json",
+        headed=False,
+    )
+
+    browser = mock_browser.return_value
+    browser.page = MagicMock()
+
+    collector = mock_collector.return_value
+    collector.collect.side_effect = KeyboardInterrupt
+
+    main()
+
+    browser.close.assert_called_once()
