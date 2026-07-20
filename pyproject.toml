@@ -1,17 +1,55 @@
 [project]
 name = "daraz-product-scraper"
 version = "0.1.0"
-description = "Production-oriented Python scraper for collecting Daraz search results for 'AirPods Pro 2nd Gen' with fixed JSON schema export."
+description = "A modern Playwright-powered scraper for Daraz products."
+readme = "README.md"
 requires-python = ">=3.11"
+license = { text = "MIT" }
 
-dependencies = [
-    "playwright",
-    "beautifulsoup4",
-    "pydantic",
-    "pytest"
+authors = [
+    { name = "Akber The Great" }
 ]
 
+keywords = [
+    "daraz",
+    "scraper",
+    "playwright",
+    "web scraping",
+    "python",
+    "ecommerce"
+]
+
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Internet :: WWW/HTTP",
+]
+
+dependencies = [
+    "playwright>=1.53",
+    "beautifulsoup4>=4.13",
+]
+
+[project.optional-dependencies]
+
+dev = [
+    "pytest>=8",
+    "ruff>=0.12",
+]
+
+[project.urls]
+
+Homepage = "https://github.com/akberthegreat2/daraz-product-scraper"
+Repository = "https://github.com/akberthegreat2/daraz-product-scraper"
+Issues = "https://github.com/akberthegreat2/daraz-product-scraper/issues"
+
 [tool.pytest.ini_options]
-pythonpath = [
-    "src"
+
+pythonpath = ["src"]
+
+testpaths = [
+    "tests"
 ]

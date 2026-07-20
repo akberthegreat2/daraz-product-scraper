@@ -5,7 +5,10 @@ from daraz_scraper.search import DarazSearch
 def main():
     browser = Browser(headless=True)
 
-    page = browser.start()
+    browser.start()
+
+    page = browser.page
+
 
     search = DarazSearch(page)
 

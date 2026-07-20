@@ -15,7 +15,9 @@ def main():
 
     browser = Browser(headless=True)
 
-    page = browser.start()
+    browser.start()
+
+    page = browser.page
 
     try:
 

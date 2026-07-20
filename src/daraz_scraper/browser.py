@@ -2,11 +2,12 @@ from playwright.sync_api import sync_playwright
 
 
 class Browser:
-    def __init__(self, headless=True, args=["--no-sandbox"]):
+    def __init__(self, headless=True, args=None):
         self.headless = headless
         self.playwright = None
         self.browser = None
         self.page = None
+        self.args = args or ["--no-sandbox"]
 
     def start(self):
         self.playwright = sync_playwright().start()
