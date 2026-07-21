@@ -7,5 +7,5 @@ class Product:
     name: str
     price: float
     sold: int
-    rating: int
+    rating: float
     link: str

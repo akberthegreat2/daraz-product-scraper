@@ -2,7 +2,7 @@
 Pagination utilities for Daraz search results.
 """
 
-from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
+from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
 
 
 class Pagination:
@@ -15,12 +15,17 @@ class Pagination:
         """
         Return the URL for the requested page number.
         """
-
+        
         parsed = urlparse(self.base_url)
 
-        query = parse_qs(parsed.query)
-        query["page"] = [str(page_number)]
+        query = dict(parse_qsl(parsed.query))
+
+        query["page"] = str(page_number)
+        query["ajax"] = "true"
+        query["isFirstRequest"] = "true"
 
         return urlunparse(
-            parsed._replace(query=urlencode(query, doseq=True))
+            parsed._replace(
+                query=urlencode(query)
+            )
         )
