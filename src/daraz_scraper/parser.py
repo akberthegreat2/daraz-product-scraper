@@ -28,7 +28,7 @@ class ProductParser:
                 sold=self._parse_sold(
                     item.get("itemSoldCntShow", "")
                 ),
-                rating=float(item.get("ratingScore", 0)),
+                rating=float(item.get("ratingScore") or 0),
                 link=item.get("productUrl", ""),
             )
             for item in items

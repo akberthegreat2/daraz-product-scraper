@@ -1,4 +1,5 @@
 import json
+import math
 
 from playwright.sync_api import Page
 
@@ -25,3 +26,16 @@ class DarazClient:
             )
 
         return json.loads(response.text())
+
+    def total_pages(self, payload: dict) -> int:
+        """Return the total number of available pages."""
+
+        main_info = payload["mainInfo"]
+
+        total_results = int(main_info["totalResults"])
+        page_size = int(main_info["pageSize"])
+
+        if page_size <= 0:
+            raise ValueError("Invalid page size returned by Daraz.")
+
+        return math.ceil(total_results / page_size)

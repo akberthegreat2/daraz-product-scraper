@@ -53,12 +53,14 @@ class ProductCollector:
             self.max_pages,
         )
 
-        products.extend(
-            self.parser.parse(first_payload)
+        logger.info(
+            "Found %d pages.",
+            total_pages,
         )
 
-        for page_number in range(1, self.max_pages + 1):
+        products = self.parser.parse(first_payload)
 
+        for page_number in range(2, total_pages + 1):
             logger.info(
                 "Scraping page %d...",
                 page_number,
@@ -83,4 +85,4 @@ class ProductCollector:
 
             products.extend(page_products)
 
-            return products
+        return products
