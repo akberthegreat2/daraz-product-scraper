@@ -1,69 +1,79 @@
 # Daraz Product Scraper
 
-A modern, modular web scraper for **Daraz** built with **Playwright** and **BeautifulSoup**.
+A modern, modular **Daraz product scraper** built with **Python** and **Playwright**.
 
-Production-oriented Python scraper for collecting Daraz search results for "AirPods Pro 2nd Gen" with fixed JSON schema export.
+Instead of scraping fragile HTML, this project captures Daraz's own AJAX search responses and extracts structured product data directly from the returned JSON. This approach is significantly more reliable against front-end layout changes while keeping the codebase clean, testable, and easy to extend.
 
-Unlike many scraping projects that place all logic inside a single script, this project is designed with maintainability in mind. Navigation, pagination, parsing, exporting, and browser management are separated into dedicated modules, making the code easier to understand, extend, and test.
+Unlike many scraping projects that place everything inside a single script, this project separates browser management, networking, pagination, parsing, exporting, and data models into dedicated modules following clean software engineering practices.
 
-> **Project Status:** Early Development (v0.1.0)
-
----
-
-## Features
-
-- Modern browser automation using Playwright
-- HTML parsing with BeautifulSoup
-- Typed product data model
-- Multi-page product collection
-- Clean modular architecture
-- JSON export
-- Unit tests
-- Easy to extend for additional exporters or scraping features
+> **Project Status:** v0.1.0
 
 ---
 
-## Project Structure
+# Features
 
-```
+* Modern browser automation using Playwright
+* Intercepts Daraz AJAX search responses
+* Parses structured JSON instead of HTML
+* Typed product data model
+* Automatic multi-page collection
+* Automatic pagination detection
+* Clean modular architecture
+* JSON export
+* Metadata-rich scrape archive
+* Unit tests with pytest
+* Easily extensible for future exporters
+
+---
+
+# Project Structure
+
+```text
 daraz-product-scraper/
 │
 ├── src/
 │   └── daraz_scraper/
 │       ├── browser.py
+│       ├── client.py
 │       ├── collector.py
 │       ├── exporter.py
 │       ├── models.py
 │       ├── pagination.py
 │       ├── parser.py
 │       ├── search.py
+│       ├── version.py
 │       └── ...
 │
 ├── tests/
+├── data/
+│   ├── output/
+│   └── samples/
 │
-├── run.py
 ├── pyproject.toml
 └── README.md
 ```
 
-### Module Overview
+---
 
-| Module | Responsibility |
-|---------|----------------|
-| `browser.py` | Launches and manages the Playwright browser |
-| `search.py` | Performs product searches on Daraz |
-| `pagination.py` | Handles navigation across multiple result pages |
-| `collector.py` | Coordinates scraping and product collection |
-| `parser.py` | Extracts structured product data from HTML |
-| `models.py` | Defines typed product models |
-| `exporter.py` | Exports collected products |
+# Module Overview
+
+| Module          | Responsibility                                    |
+| --------------- | ------------------------------------------------- |
+| `browser.py`    | Launches and manages the Playwright browser       |
+| `client.py`     | Retrieves Daraz AJAX search responses             |
+| `collector.py`  | Coordinates the complete scraping workflow        |
+| `pagination.py` | Generates page URLs                               |
+| `parser.py`     | Converts Daraz JSON payloads into Product objects |
+| `models.py`     | Defines typed product models                      |
+| `exporter.py`   | Writes JSON exports                               |
+| `search.py`     | Builds search URLs                                |
 
 ---
 
 # Requirements
 
-- Python 3.11 or newer
-- Chromium browser (installed through Playwright)
+* Python 3.11 or newer
+* Chromium browser (installed through Playwright)
 
 ---
 
@@ -83,7 +93,7 @@ Create a virtual environment.
 python -m venv .venv
 ```
 
-Activate the environment.
+Activate it.
 
 ### Windows
 
@@ -97,13 +107,13 @@ Activate the environment.
 source .venv/bin/activate
 ```
 
-Install the package.
+Install the project.
 
 ```bash
 pip install -e .
 ```
 
-Install the Playwright browser.
+Install Chromium for Playwright.
 
 ```bash
 playwright install chromium
@@ -113,139 +123,114 @@ playwright install chromium
 
 # Quick Start
 
-## Command Line Usage
-
-Run the scraper directly after installation:
+Scrape products.
 
 ```bash
 daraz-scraper "AirPods Pro 2nd Gen"
 ```
 
-### Examples
-
-Scrape a different product:
-
-```bash
-daraz-scraper "iPhone 15"
-```
-
-Limit the number of pages:
+Limit the number of pages.
 
 ```bash
 daraz-scraper "Mechanical Keyboard" --pages 5
 ```
 
-Save to a custom output file:
+Save to a custom output file.
 
 ```bash
 daraz-scraper "RTX 5070" --output data/output/gpus.json
 ```
 
-Run with a visible browser window:
+Launch a visible browser.
 
 ```bash
 daraz-scraper "SSD" --headed
 ```
 
-View all available options:
+Display all options.
 
 ```bash
 daraz-scraper --help
 ```
+
 ---
 
-# How It Works
+# Architecture
 
-The scraper follows a simple pipeline.
+The scraper no longer parses product cards from HTML.
 
-```
+Instead, it allows Daraz's website to load normally, intercepts the browser's own AJAX search request, and parses the returned JSON payload.
+
+```text
 Browser
     │
     ▼
-Search Products
+Load Search Page
     │
     ▼
-Navigate Pages
+Intercept AJAX Response
     │
     ▼
-Collect HTML
+Parse JSON Payload
     │
     ▼
-Parse Product Data
-    │
-    ▼
-Typed Product Objects
+Create Product Objects
     │
     ▼
 Export Results
 ```
 
-Keeping each step independent makes the project easier to maintain and extend.
+This design offers several advantages:
+
+* Less affected by UI redesigns
+* Faster parsing
+* Structured product data
+* Cleaner code
+* Better long-term maintainability
 
 ---
 
 # Output
 
-The scraper currently exports product information as JSON.
+The scraper produces two JSON files.
 
-Example output:
+## products.json
+
+A lightweight export containing only parsed products.
+
+Example:
 
 ```json
 {
   "name": "Apple AirPods Pro (2nd Generation)",
   "price": 32990.0,
+  "sold": 580,
   "rating": 4.9,
-  "sold": "500+",
-  "link": "https://..."
+  "link": "https://www.daraz.com.bd/..."
 }
 ```
+
+## scrape.json
+
+A metadata-rich archive containing information about the scrape, including:
+
+* search query
+* timestamp
+* scraper version
+* total products
+* parsed products
+* raw Daraz payload
+
+This file is intended for debugging, auditing, and future development.
 
 ---
 
 # Running Tests
 
-Execute the test suite with
+Run the complete test suite.
 
 ```bash
 pytest
-```
-
----
-
-# Troubleshooting
-
-## Chromium executable not found
-
-If you see an error similar to
-
-```
-Executable doesn't exist...
-```
-
-Playwright's browser binaries have not been installed.
-
-Run
-
-```bash
-playwright install chromium
-```
-
-and try again.
-
----
-
-## Virtual environment not activated
-
-If Python cannot locate dependencies, make sure your virtual environment is activated before running the project.
-
----
-
-## Updating Playwright
-
-If Playwright is updated, reinstall the browser binaries.
-
-```bash
-playwright install chromium
 ```
 
 ---
@@ -264,7 +249,7 @@ Run tests.
 pytest
 ```
 
-Lint the project.
+Run Ruff.
 
 ```bash
 ruff check .
@@ -272,27 +257,79 @@ ruff check .
 
 ---
 
+# Troubleshooting
+
+## Chromium executable not found
+
+Install the Playwright browser.
+
+```bash
+playwright install chromium
+```
+
+---
+
+## Virtual environment not activated
+
+Activate your virtual environment before running the project.
+
+---
+
+## Updating Playwright
+
+If Playwright is upgraded, reinstall the browser binaries.
+
+```bash
+playwright install chromium
+```
+
+---
+
 # Roadmap
 
-Planned improvements include
+Future improvements include:
 
-- CSV export
-- Excel export
-- SQLite export
-- Retry mechanism
-- Better exception handling
-- CLI interface
-- Logging improvements
-- GitHub Actions
-- Documentation website
+* CSV exporter
+* Excel exporter
+* SQLite exporter
+* Retry mechanism
+* Better request throttling
+* Progress bar
+* GitHub Actions
+* Docker support
+* Documentation website
+
+---
+
+# Why This Project?
+
+This project was created as an exercise in building production-quality Python software rather than simply collecting product data.
+
+The emphasis is on:
+
+* clean architecture
+* maintainable code
+* modular design
+* typed models
+* testing
+* extensibility
+* reliability
+
+One interesting engineering challenge was adapting the scraper after discovering that direct requests to Daraz's internal search endpoint were protected by Alibaba's anti-bot systems. The project was redesigned to intercept the browser's own AJAX responses instead, resulting in a more robust and maintainable solution.
 
 ---
 
 # Contributing
 
-Contributions, bug reports, feature requests, and suggestions are welcome.
+Bug reports, feature requests, pull requests, and suggestions are welcome.
 
-If you discover a bug or have an idea for improvement, feel free to open an issue or submit a pull request.
+---
+
+# Acknowledgements
+
+This project was developed by **Sakib**.
+
+Special thanks to **ChatGPT (OpenAI)** for assistance with architecture discussions, debugging, testing, documentation, code review, and design decisions throughout the development of this project.
 
 ---
 
@@ -301,19 +338,3 @@ If you discover a bug or have an idea for improvement, feel free to open an issu
 This project is licensed under the MIT License.
 
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
-
----
-
-# Why This Project?
-
-This project was built as an exercise in writing **clean, maintainable Python**, not simply scraping data.
-
-The focus is on:
-
-- modular architecture
-- readable code
-- typed data models
-- separation of concerns
-- maintainability over shortcuts
-
-The goal is to provide a solid foundation that can grow into a production-quality scraping library.
