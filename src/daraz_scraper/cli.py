@@ -14,28 +14,8 @@ from daraz_scraper import (
     ProductCollector,
 )
 
+from daraz_scraper.logging_config import configure_logging
 
-LOG_DIR = Path("logs")
-LOG_DIR.mkdir(exist_ok=True)
-
-log_file = (
-    LOG_DIR
-    / f"scraper_{datetime.now():%Y%m%d_%H%M%S}.log"
-)
-
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s | %(levelname)s | %(message)s",
-    handlers=[
-        logging.FileHandler(
-            LOG_DIR / log_file,
-            encoding="utf-8",
-        ),
-        logging.StreamHandler(),
-    ],
-)
-
-logger = logging.getLogger(__name__)
 
 DEFAULT_QUERY = "AirPods Pro 2nd Gen"
 DEFAULT_OUTPUT = "data/output/products.json"
@@ -90,10 +70,9 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     """Run the scraper."""
 
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(levelname)s: %(message)s",
-    )
+configure_logging()
+
+    logger = logging.getLogger(__name__)
 
     logger.info(
         "Daraz Product Scraper %s",
