@@ -1,7 +1,7 @@
 [project]
 name = "daraz-product-scraper"
 version = "0.1.0"
-description = "A modern Playwright-powered scraper for Daraz products."
+description = "A modern, modular Playwright-powered scraper for Daraz."
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
@@ -14,18 +14,25 @@ keywords = [
     "daraz",
     "scraper",
     "playwright",
-    "web scraping",
+    "web-scraping",
+    "ecommerce",
     "python",
-    "ecommerce"
 ]
 
 classifiers = [
     "Development Status :: 3 - Alpha",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.11",
+    "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
+
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+
     "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Utilities",
 ]
 
 dependencies = [
@@ -34,25 +41,30 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-
 dev = [
     "pytest>=8",
     "ruff>=0.12",
 ]
 
 [project.urls]
-
 Homepage = "https://github.com/akberthegreat2/daraz-product-scraper"
 Repository = "https://github.com/akberthegreat2/daraz-product-scraper"
 Issues = "https://github.com/akberthegreat2/daraz-product-scraper/issues"
 
-[tool.pytest.ini_options]
-
-pythonpath = ["src"]
-
-testpaths = [
-    "tests"
-]
-
 [project.scripts]
 daraz-scraper = "daraz_scraper.cli:main"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 79
+
+[tool.ruff.lint]
+select = [
+    "E",
+    "F",
+    "I",
+]
