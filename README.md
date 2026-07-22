@@ -1,5 +1,7 @@
 # Daraz Product Scraper
 
+![CI](https://github.com/akberthegreat2/daraz-product-scraper/actions/workflows/ci.yml/badge.svg)
+
 A modern, modular **Daraz product scraper** built with **Python** and **Playwright**.
 
 Instead of scraping fragile HTML, this project captures Daraz's own AJAX search responses and extracts structured product data directly from the returned JSON. This approach is significantly more reliable against front-end layout changes while keeping the codebase clean, testable, and easy to extend.
