@@ -11,14 +11,30 @@ class DarazClient:
         self.page = page
 
     def get_search_results(self, url: str) -> dict:
-        response = self.page.goto(
-            url,
-            wait_until="networkidle",
-            timeout=60000,
+        """
+        Fetch the JSON search response by letting Daraz's own page
+        perform the AJAX request.
+        """
+
+        normal_url = url.replace(
+            "&ajax=true&isFirstRequest=true",
+            "",
         )
 
-        if response is None:
-            raise RuntimeError("No response received from Daraz.")
+        with self.page.expect_response(
+            lambda response: (
+                "ajax=true" in response.url
+                and response.request.resource_type == "xhr"
+            ),
+            timeout=60000,
+        ) as response_info:
+
+            self.page.goto(
+                normal_url,
+                wait_until="networkidle",
+            )
+
+        response = response_info.value
 
         if not response.ok:
             raise RuntimeError(
@@ -26,6 +42,7 @@ class DarazClient:
             )
 
         return json.loads(response.text())
+
 
     def total_pages(self, payload: dict) -> int:
         """Return the total number of available pages."""

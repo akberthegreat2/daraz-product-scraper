@@ -4,7 +4,7 @@ Collect products from Daraz search results.
 
 from playwright.sync_api import Page
 
-import logging
+import logging, json
 
 from .client import DarazClient
 from .pagination import Pagination
@@ -47,6 +47,12 @@ class ProductCollector:
         first_payload = self.client.get_search_results(
             self.pagination.page_url(1)
         )
+
+        print(json.dumps(
+            first_payload["mods"]["listItems"][0],
+            indent=2,
+            ensure_ascii=False,
+        ))
 
         total_pages = min(
             self.client.total_pages(first_payload),

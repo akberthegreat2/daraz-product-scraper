@@ -29,7 +29,7 @@ class ProductParser:
                     item.get("itemSoldCntShow", "")
                 ),
                 rating=float(item.get("ratingScore") or 0),
-                link=item.get("productUrl", ""),
+                link=item.get("itemUrl", ""),
             )
             for item in items
         ]
