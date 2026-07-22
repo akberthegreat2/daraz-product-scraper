@@ -5,6 +5,7 @@ JSON export utilities.
 from __future__ import annotations
 
 import json
+from pathlib import Path
 from datetime import UTC, datetime
 from pathlib import Path
 from dataclasses import asdict
@@ -95,7 +96,8 @@ class JsonExporter:
                     file,
                     indent=2,
                     ensure_ascii=False,
-                )except OSError as error:
+                )
+        except OSError as error:
             raise ExportError(
                 f"Failed to write '{output_file}'."
             ) from error

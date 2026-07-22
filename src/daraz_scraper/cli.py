@@ -70,7 +70,7 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     """Run the scraper."""
 
-configure_logging()
+    configure_logging()
 
     logger = logging.getLogger(__name__)
 

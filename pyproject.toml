@@ -40,9 +40,12 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+
 dev = [
     "pytest>=8",
     "ruff>=0.12",
+    "mypy>=1.17",
+    "pre-commit>=4.3",
 ]
 
 [project.urls]
@@ -67,3 +70,13 @@ select = [
     "F",
     "I",
 ]
+
+[tool.mypy]
+
+python_version = "3.11"
+
+warn_return_any = true
+warn_unused_configs = true
+check_untyped_defs = true
+disallow_untyped_defs = false
+ignore_missing_imports = true
