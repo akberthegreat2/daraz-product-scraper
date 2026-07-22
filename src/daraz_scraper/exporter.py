@@ -8,6 +8,7 @@ from pathlib import Path
 from datetime import datetime
 
 from importlib.metadata import version
+from dataclasses import asdict
 
 from .constants import AUTHOR
 from .constants import PROJECT_NAME
@@ -16,6 +17,9 @@ from .constants import TRANSPORT
 
 from .models import Product
 
+
+def serialize_product(product: Product) -> dict:
+    return asdict(product)
 
 class JsonExporter:
     """Export products to a JSON file."""
@@ -61,7 +65,7 @@ class JsonExporter:
     ) -> dict:
         """Convert a Product into a JSON-compatible dictionary."""
 
-        data = asdict(product)
+        data =  serialize_product(product)
 
         return {
             field: data.get(field, "")
@@ -105,7 +109,7 @@ class JsonExporter:
                 "source": "Daraz JSON",
             },
             "products": [
-                product.model_dump()
+                serialize_product(product)
                 for product in products
             ],
         }
