@@ -2,111 +2,82 @@
 JSON export utilities.
 """
 
+from __future__ import annotations
+
 import json
-from dataclasses import asdict
+from datetime import UTC, datetime
 from pathlib import Path
-from datetime import datetime
-
-from importlib.metadata import version
 from dataclasses import asdict
 
-from .constants import AUTHOR
-from .constants import PROJECT_NAME
-from .constants import SOURCE
-from .constants import TRANSPORT
-
+from .constants import AUTHOR, VERSION
 from .models import Product
 
 
 def serialize_product(product: Product) -> dict:
     return asdict(product)
 
-class JsonExporter:
-    """Export products to a JSON file."""
 
-    REQUIRED_FIELDS = (
-        "name",
-        "price",
-        "sold",
-        "rating",
-        "link",
-    )
+class JsonExporter:
+    """Export scraped products to JSON files."""
 
     def export(
         self,
         products: list[Product],
-        filename: str | Path,
-    ) -> None:
-        """Export products to a formatted JSON file."""
-
-        output = [
-            self._serialize(product)
-            for product in products
-        ]
-
-        filename = Path(filename)
-
-        filename.parent.mkdir(parents=True, exist_ok=True)
-
-        with filename.open(
-            "w",
-            encoding="utf-8",
-        ) as file:
-            json.dump(
-                output,
-                file,
-                ensure_ascii=False,
-                indent=2,
-            )
-
-    def _serialize(
-        self,
-        product: Product,
-    ) -> dict:
-        """Convert a Product into a JSON-compatible dictionary."""
-
-        data =  serialize_product(product)
-
-        return {
-            field: data.get(field, "")
-            for field in self.REQUIRED_FIELDS
-            }
-
-    def export_scrape(
-        self,
-        products: list[Product],
-        filename: str,
-        *,
-        query: str,
-        pages: int,
+        output_file: str | Path,
     ) -> None:
         """
-        Export products together with scrape metadata.
+        Export products using the original simple schema.
+
+        This file is kept for compatibility.
         """
 
-        path = Path(filename)
-        path.parent.mkdir(
+        output_file = Path(output_file)
+
+        output_file.parent.mkdir(
             parents=True,
             exist_ok=True,
         )
 
-        payload = {
+        with output_file.open(
+            "w",
+            encoding="utf-8",
+        ) as file:
+            json.dump(
+                [serialize_product(product) for product in products],
+                file,
+                indent=2,
+                ensure_ascii=False,
+            )
+
+    def export_scrape(
+        self,
+        *,
+        products: list[Product],
+        output_file: str | Path,
+        query: str,
+        pages: int,
+    ) -> None:
+        """
+        Export a metadata-rich JSON file for development and analysis.
+        """
+
+        output_file = Path(output_file)
+
+        metadata_file = output_file.with_name(
+            output_file.stem + "_metadata.json"
+        )
+
+        scrape = {
             "metadata": {
-                "project": "daraz-product-scraper",
-                "version": version(PROJECT_NAME),
-                "author": "Sakib",
-                "scraped_at": (
-                    datetime.now()
-                    .astimezone()
-                    .isoformat()
-                ),
+                "project": "Daraz Product Scraper",
+                "version": AUTHOR,
+                "author": VERSION,
+                "generated_at": datetime.now(
+                    UTC
+                ).isoformat(),
                 "query": query,
-                "pages": pages,
-                "products": len(products),
-                "transport": (
-                    "Playwright response interception"
-                ),
-                "source": "Daraz JSON",
+                "pages_requested": pages,
+                "products_collected": len(products),
             },
             "products": [
                 serialize_product(product)
@@ -114,13 +85,13 @@ class JsonExporter:
             ],
         }
 
-        with path.open(
+        with metadata_file.open(
             "w",
             encoding="utf-8",
         ) as file:
             json.dump(
-                payload,
+                scrape,
                 file,
-                ensure_ascii=False,
                 indent=2,
+                ensure_ascii=False,
             )

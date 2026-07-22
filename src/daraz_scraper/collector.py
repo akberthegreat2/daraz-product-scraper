@@ -48,12 +48,6 @@ class ProductCollector:
             self.pagination.page_url(1)
         )
 
-        print(json.dumps(
-            first_payload["mods"]["listItems"][0],
-            indent=2,
-            ensure_ascii=False,
-        ))
-
         total_pages = min(
             self.client.total_pages(first_payload),
             self.max_pages,

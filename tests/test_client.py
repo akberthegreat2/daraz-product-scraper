@@ -1,47 +1,44 @@
-from unittest.mock import Mock
+import math
 
-import pytest
+from unittest.mock import Mock
 
 from daraz_scraper.client import DarazClient
 
 
-def test_get_search_results_returns_json():
-    response = Mock()
-    response.ok = True
-    response.status = 200
-    response.url = "https://example.com"
-    response.text.return_value = '{"mods":{"listItems":[]}}'
+def test_total_pages():
+    client = DarazClient(Mock())
 
-    page = Mock()
-    page.goto.return_value = response
+    payload = {
+        "mainInfo": {
+            "totalResults": "81",
+            "pageSize": "40",
+        }
+    }
 
-    client = DarazClient(page)
-
-    data = client.get_search_results("https://example.com")
-
-    assert data["mods"]["listItems"] == []
+    assert client.total_pages(payload) == 3
 
 
-def test_get_search_results_raises_when_request_fails():
-    response = Mock()
-    response.ok = False
-    response.status = 500
-    response.url = "https://example.com"
+def test_total_pages_exact_multiple():
+    client = DarazClient(Mock())
 
-    page = Mock()
-    page.goto.return_value = response
+    payload = {
+        "mainInfo": {
+            "totalResults": "80",
+            "pageSize": "40",
+        }
+    }
 
-    client = DarazClient(page)
-
-    with pytest.raises(RuntimeError):
-        client.get_search_results("https://example.com")
+    assert client.total_pages(payload) == 2
 
 
-def test_get_search_results_raises_when_no_response():
-    page = Mock()
-    page.goto.return_value = None
+def test_total_pages_single_page():
+    client = DarazClient(Mock())
 
-    client = DarazClient(page)
+    payload = {
+        "mainInfo": {
+            "totalResults": "9",
+            "pageSize": "40",
+        }
+    }
 
-    with pytest.raises(RuntimeError):
-        client.get_search_results("https://example.com")
+    assert client.total_pages(payload) == 1

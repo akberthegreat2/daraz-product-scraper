@@ -37,7 +37,6 @@ classifiers = [
 
 dependencies = [
     "playwright>=1.53",
-    "beautifulsoup4>=4.13",
 ]
 
 [project.optional-dependencies]

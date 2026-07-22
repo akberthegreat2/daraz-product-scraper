@@ -1,0 +1,20 @@
+{
+  "metadata": {
+    "project": "Daraz Product Scraper",
+    "version": "Sakib",
+    "author": "0.1.0",
+    "generated_at": "2026-07-22T11:37:56.344692+00:00",
+    "query": "AirPods Pro",
+    "pages_requested": 1,
+    "products_collected": 1
+  },
+  "products": [
+    {
+      "name": "AirPods Pro 2nd Gen",
+      "price": 384.0,
+      "sold": 482,
+      "rating": 4.8,
+      "link": "https://example.com"
+    }
+  ]
+}

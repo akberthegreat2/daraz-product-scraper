@@ -11,8 +11,8 @@ def test_json_schema():
             name="AirPods Pro 2nd Gen",
             price=384.0,
             sold=482,
-            rating=78,
-            link="https://example.com"
+            rating=4.8,
+            link="https://example.com",
         )
     ]
 
@@ -22,14 +22,13 @@ def test_json_schema():
 
     exporter.export(
         products,
-        output
+        output,
     )
 
     with open(
         output,
-        encoding="utf-8"
+        encoding="utf-8",
     ) as file:
-
         data = json.load(file)
 
     assert len(data) == 1
@@ -44,4 +43,48 @@ def test_json_schema():
 
     assert isinstance(data[0]["price"], float)
     assert isinstance(data[0]["sold"], int)
-    assert isinstance(data[0]["rating"], int)
+    assert isinstance(data[0]["rating"], float)
+    assert isinstance(data[0]["link"], str)
+
+
+def test_metadata_export():
+
+    products = [
+        Product(
+            name="AirPods Pro 2nd Gen",
+            price=384.0,
+            sold=482,
+            rating=4.8,
+            link="https://example.com",
+        )
+    ]
+
+    output = "data/output/test.json"
+
+    exporter = JsonExporter()
+
+    exporter.export_scrape(
+        products=products,
+        output_file=output,
+        query="AirPods Pro",
+        pages=1,
+    )
+
+    with open(
+        "data/output/test_metadata.json",
+        encoding="utf-8",
+    ) as file:
+        data = json.load(file)
+
+    assert "metadata" in data
+    assert "products" in data
+
+    metadata = data["metadata"]
+
+    assert metadata["project"] == "Daraz Product Scraper"
+    assert metadata["query"] == "AirPods Pro"
+    assert metadata["pages_requested"] == 1
+    assert metadata["products_collected"] == 1
+
+    assert len(data["products"]) == 1
+    assert data["products"][0]["name"] == "AirPods Pro 2nd Gen"

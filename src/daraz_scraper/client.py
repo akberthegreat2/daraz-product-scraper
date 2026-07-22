@@ -44,7 +44,7 @@ class DarazClient:
         return json.loads(response.text())
 
 
-    def total_pages(self, payload: dict) -> int:
+    def total_pages(self, payload: dict[str, Any]) -> int:
         """Return the total number of available pages."""
 
         main_info = payload["mainInfo"]
