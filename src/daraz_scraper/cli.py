@@ -108,6 +108,13 @@ def main() -> int:
             args.output,
         )
 
+        JsonExporter().export_scrape(
+            products,
+            "data/output/scrape.json",
+            query=args.query,
+            pages=args.pages,
+        )
+
         logger.info(
             "Saved %d products to %s.",
             len(products),

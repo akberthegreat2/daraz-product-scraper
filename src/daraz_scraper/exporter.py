@@ -5,6 +5,14 @@ JSON export utilities.
 import json
 from dataclasses import asdict
 from pathlib import Path
+from datetime import datetime
+
+from importlib.metadata import version
+
+from .constants import AUTHOR
+from .constants import PROJECT_NAME
+from .constants import SOURCE
+from .constants import TRANSPORT
 
 from .models import Product
 
@@ -58,4 +66,57 @@ class JsonExporter:
         return {
             field: data.get(field, "")
             for field in self.REQUIRED_FIELDS
+            }
+
+    def export_scrape(
+        self,
+        products: list[Product],
+        filename: str,
+        *,
+        query: str,
+        pages: int,
+    ) -> None:
+        """
+        Export products together with scrape metadata.
+        """
+
+        path = Path(filename)
+        path.parent.mkdir(
+            parents=True,
+            exist_ok=True,
+        )
+
+        payload = {
+            "metadata": {
+                "project": "daraz-product-scraper",
+                "version": version(PROJECT_NAME),
+                "author": "Sakib",
+                "scraped_at": (
+                    datetime.now()
+                    .astimezone()
+                    .isoformat()
+                ),
+                "query": query,
+                "pages": pages,
+                "products": len(products),
+                "transport": (
+                    "Playwright response interception"
+                ),
+                "source": "Daraz JSON",
+            },
+            "products": [
+                product.model_dump()
+                for product in products
+            ],
         }
+
+        with path.open(
+            "w",
+            encoding="utf-8",
+        ) as file:
+            json.dump(
+                payload,
+                file,
+                ensure_ascii=False,
+                indent=2,
+            )
