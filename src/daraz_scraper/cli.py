@@ -109,8 +109,8 @@ def main() -> int:
         )
 
         JsonExporter().export_scrape(
-            products,
-            "data/output/scrape.json",
+            products=products,
+            output_file="data/output/scrape.json",
             query=args.query,
             pages=args.pages,
         )
