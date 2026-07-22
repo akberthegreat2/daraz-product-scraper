@@ -218,4 +218,4 @@ __marimo__/
 .streamlit/secrets.toml
 
 # No logs and data on commit
-logs/*
+logs/*.log
