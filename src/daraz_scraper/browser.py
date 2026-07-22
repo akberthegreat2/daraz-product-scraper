@@ -7,6 +7,7 @@ for launching and shutting down the browser.
 
 from playwright.sync_api import Page, Playwright, Browser as PlaywrightBrowser, sync_playwright
 
+from daraz_scraper.exceptions import BrowserError
 
 class BrowserManager:
     """Launch and manage a Playwright Chromium browser."""
@@ -26,16 +27,21 @@ class BrowserManager:
     def start(self) -> Page:
         """Launch Chromium and return a new page."""
 
-        self.playwright = sync_playwright().start()
+        try:
+            self.playwright = sync_playwright().start()
 
-        self.browser = self.playwright.chromium.launch(
-            headless=self.headless,
-            args=self.args,
-        )
+            self.browser = self.playwright.chromium.launch(
+                headless=self.headless,
+                args=self.args,
+            )
 
-        self.page = self.browser.new_page()
+            self.page = self.browser.new_page()
 
-        return self.page
+            return self.page
+        except Exception as error:
+            raise BrowserError(
+                "Failed to launch browser."
+            ) from error
 
     def close(self) -> None:
         """Close the browser and stop Playwright."""

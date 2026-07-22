@@ -15,7 +15,7 @@ from daraz_scraper import (
 )
 
 from daraz_scraper.logging_config import configure_logging
-
+from daraz_scraper.exceptions import DarazScraperError
 
 DEFAULT_QUERY = "AirPods Pro 2nd Gen"
 DEFAULT_OUTPUT = "data/output/products.json"
@@ -127,8 +127,10 @@ configure_logging()
         logger.info("Scraping cancelled by user.")
         return 130
 
-    except Exception:
-        logger.exception("Scraping failed.")
+    except DarazScraperError:
+        logger.exception(
+            "Scraping failed."
+        )
         return 1
 
     finally:

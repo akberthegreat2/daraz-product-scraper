@@ -85,13 +85,18 @@ class JsonExporter:
             ],
         }
 
-        with metadata_file.open(
-            "w",
-            encoding="utf-8",
-        ) as file:
-            json.dump(
-                scrape,
-                file,
-                indent=2,
-                ensure_ascii=False,
-            )
+        try:
+            with metadata_file.open(
+                "w",
+                encoding="utf-8",
+            ) as file:
+                json.dump(
+                    scrape,
+                    file,
+                    indent=2,
+                    ensure_ascii=False,
+                )except OSError as error:
+            raise ExportError(
+                f"Failed to write '{output_file}'."
+            ) from error
+

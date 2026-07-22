@@ -3,6 +3,7 @@ import math
 
 from playwright.sync_api import Page
 
+from .exceptions import RequestError, ParsingError
 
 class DarazClient:
     """Fetch structured product data from Daraz."""
@@ -37,7 +38,7 @@ class DarazClient:
         response = response_info.value
 
         if not response.ok:
-            raise RuntimeError(
+            raise RequestError(
                 f"HTTP {response.status}: {response.url}"
             )
 
@@ -53,6 +54,6 @@ class DarazClient:
         page_size = int(main_info["pageSize"])
 
         if page_size <= 0:
-            raise ValueError("Invalid page size returned by Daraz.")
+            raise ParsingError("Invalid page size returned by Daraz.")
 
         return math.ceil(total_results / page_size)
